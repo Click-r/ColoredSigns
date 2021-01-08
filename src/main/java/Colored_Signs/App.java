@@ -2,15 +2,9 @@ package Colored_Signs;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.Material;
-import org.bukkit.block.*;
-import org.bukkit.block.data.BlockData;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,10 +17,13 @@ public class App extends JavaPlugin implements Listener {
 
             @EventHandler
             public void signChange(SignChangeEvent event) {
+                if (!event.getPlayer().hasPermission("ColoredSigns.format")) {
+                    return;
+                }
 
                 final String formatChar = "§";
 
-                final String colors = "0123456789abcdefg";
+                final String colors = "0123456789abcdef";
                 final String formats = "klmnor";
 
                 final String pattern = "&[" + colors + formats + "]";

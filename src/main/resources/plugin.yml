@@ -2,3 +2,14 @@ main: Colored_Signs.App
 name: ColoredSigns
 version: 0.1
 api-version: 1.16
+author: Memeism
+description: Allows you to use minecraft formatting on signs
+permissions:
+  ColoredSigns.format:
+    description: Allows the user to use chat formats on signs
+    default: false
+commands:
+  coloredsigns_info:
+    description: Tells user basic information about the plugin
+    usage: "& is the character which allows for the formatting characters to be parsed.\nValid formats are as follows:\n  §4Colors§r:\n   Black: &0 \n   Dark blue: &1 \n   Dark green: &2 \n   Dark aqua: &3 \n   Dark red: &4 \n   Dark purple: &5 \n   Gold: &6 \n   Gray: &7 \n   Dark gray: &8 \n   Blue: &9 \n   Green: &a \n   Aqua: &b \n   Red: &c \n   Light purple: &d \n   Yellow: &e\n   White: &f \n  §lFormats§r:\n   Obfuscated: &k \n   Bold: &l \n   Strikethrough: &m \n   Underline: &n \n   Italic: &o \n   Reset: &r\n\nMade by yours truly, Memeism"
+prefix: MemesColoredSigns

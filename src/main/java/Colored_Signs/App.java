@@ -9,8 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class App extends JavaPlugin implements Listener {
-    @Override
 
+    @Override
     public void onEnable() {
 
         Listener listener = new Listener(){
@@ -21,17 +21,28 @@ public class App extends JavaPlugin implements Listener {
                     return;
                 }
 
+                String[] lines = event.getLines();
+
                 final String formatChar = "§";
 
                 final String colors = "0123456789abcdef";
                 final String formats = "klmnor";
+                final String concat = colors + formats;
 
-                final String pattern = "&[" + colors + formats + "]";
-                Pattern lookfor = Pattern.compile(pattern);
-
-                String[] lines = event.getLines();
+                final String alternating = "(&[" + concat + "]+:)|&r";
+                final String pattern = "&[" + concat + "]";
 
                 int i = 0;
+
+                String[] formatted = customSyntax.alternate(lines, alternating);
+
+                for (String line : formatted) {
+                    event.setLine(i, line);
+                    i++;
+                }
+
+                i = 0;
+                Pattern lookfor = Pattern.compile(pattern);
 
                 for (String line : lines) {
                     if (!line.isEmpty() && line.length() > 2) {
@@ -62,7 +73,6 @@ public class App extends JavaPlugin implements Listener {
     }
 
     @Override
-
     public void onDisable() {
         
     }

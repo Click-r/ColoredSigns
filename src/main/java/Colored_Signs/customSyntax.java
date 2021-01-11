@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 import java.util.Stack;
 
 public class customSyntax {
+    //TODO: make the part of the code responsible for alternating the format into separate function so it'll be easier to solve the issues.
+    
     public static String[] alternate(String[] lines, String pattern) {
         int i = 0;
         Pattern lookfor = Pattern.compile(pattern);

@@ -2,91 +2,56 @@ package Colored_Signs;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Stack;
 
 public class customSyntax {
-    //TODO: make the part of the code responsible for alternating the format into separate function so it'll be easier to solve the issues.
-    
+
+    final static String formatChar = "§";
+    final static String reset = formatChar + "r";
+
+    static String format(String keycodes, String text) {
+        String toReturn = "";
+
+        int n = keycodes.length();
+        final int len = text.length();
+
+        for (int k = 0; k < len; k++) {
+            String col = formatChar + keycodes.charAt(k % n); // modular arithmetic needed to alternate colours
+
+            toReturn += col + text.charAt(k) + reset;
+        }
+
+        return toReturn;
+    }
+
     public static String[] alternate(String[] lines, String pattern) {
         int i = 0;
         Pattern lookfor = Pattern.compile(pattern);
 
-        final String formatChar = "§";
-
         for (String line: lines) {
             if (!line.isEmpty() && line.length() > 2) {
+                int initialLen = line.length();
+
                 Matcher match = lookfor.matcher(line);
 
-                String newLine = line;
-                newLine += "&r";
-
-                int start = 0;
-                boolean change = false;
-
-                Stack<String> sections = new Stack<String>();
-
-                int j = 0;
-                String leftover = "";
+                String finalString = "";
 
                 while (match.find()) {
-                    String found = match.group();
-                    int begin = match.start();
-                    int finish = match.end();
+                    int correctionTerm = initialLen - line.length(); // match.start() is relative to the initial size of the string, so we have to correct that
+                    String extra = line.substring(0, match.start() - correctionTerm);
+                    finalString += extra + reset;
 
-                    if (j == 0 && begin != start) {
-                        leftover = line.substring(0, begin);
-                        start = begin;
-                    }
+                    line = line.substring(extra.length() + match.group().length());
 
-                    if (change) {
-                        sections.push(line.substring(start,begin));
+                    String apply = match.group(1);
+                    apply = apply.substring(1,apply.length()-1);
 
-                        change = false;
-                    }
+                    String text = match.group(2);
 
-                    if (finish != newLine.length()) {
-                        sections.push(found);
-
-                        start = finish;
-                        change = true;
-                    } else {
-                        sections.push(found);
-                        sections.push(line.substring(finish+1));
-                    }
-
-                    j++;
+                    finalString += format(apply, text);
                 }
 
-                if (sections.size() % 2 != 0) {
-                    int ind = sections.peek().length()-1;
-                    sections.push(line.substring(ind));
-                }
-
-                String finalLine = "";
-
-                while (!sections.empty()) {
-                    String txt = sections.pop();
-                    String pat = sections.pop();
-
-                    if (!txt.isEmpty()) {
-
-                        pat = pat.substring(1, pat.length()-1);
-                        txt = txt.substring(1);
-
-                        int n = pat.length();
-                        final int len = txt.length();
-
-                        for (int k = 0; k < len; k++) {
-                            String col = formatChar + pat.charAt(k % n); // modular arithmetic to alternate colours
-
-                            finalLine += col + txt.charAt(k) + formatChar + "r";
-                        }
-                    } else {
-                        finalLine += formatChar + "r";
-                    }
-                }
-                if (finalLine.isEmpty()) finalLine = line + formatChar + "r";
-                lines[i] = leftover + finalLine;
+                finalString += line + reset;
+                lines[i] = finalString;
             }
 
             i++;

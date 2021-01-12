@@ -29,7 +29,7 @@ public class App extends JavaPlugin implements Listener {
                 final String formats = "klmnor";
                 final String concat = colors + formats;
 
-                final String alternating = "(&[" + concat + "]+:)|&r";
+                final String alternating = "(&[" + concat + "]+:)([^&]+)"; // 2 capturing groups so we can extract both the desired colours + text
                 final String pattern = "&[" + concat + "]";
 
                 int i = 0;
